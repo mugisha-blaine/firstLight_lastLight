@@ -11,9 +11,6 @@ class SunlightApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Removes the red debug banner
-      debugShowCheckedModeBanner: false,
-
       title: 'Sunlight Card App',
 
       theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.lightBlue),
@@ -23,7 +20,7 @@ class SunlightApp extends StatelessWidget {
   }
 }
 
-// We use StatefulWidget because city data changes after searching.
+// I used StatefulWidget because city data changes after user searches.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -33,7 +30,6 @@ class HomePage extends StatefulWidget {
 
 // This class stores the changing data of the page.
 class _HomePageState extends State<HomePage> {
-  // This controller helps us get what the user types.
   final TextEditingController cityController = TextEditingController();
 
   // Default city data shown when the app opens.
@@ -43,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   String sunset = '6:08 PM';
   String lastLight = '6:28 PM';
 
-  // This message appears when the city is not found.
+  // Message to be displayed when the city is not found.
   String errorMessage = '';
 
   // This function runs when the user searches for a city.
@@ -85,35 +81,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void dispose() {
-    // This cleans the controller when the page is closed.
-    cityController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('First Light & Last Light'),
         centerTitle: true,
-        backgroundColor: Colors.lightBlue.shade300,
+        backgroundColor: Colors.lightBlue,
       ),
 
       body: Container(
         width: double.infinity,
         height: double.infinity,
 
-        // Sky-like background using gradient colors
+        // Sky-like background using gradient colors.
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF4FC3F7), // sky blue
-              Color(0xFF81D4FA), // soft blue
-              Color(0xFFE1F5FE), // very light blue
-            ],
+            colors: [Color(0xFF4FC3F7), Color(0xFF81D4FA), Color(0xFFE1F5FE)],
           ),
         ),
 
@@ -125,7 +110,6 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const SizedBox(height: 20),
 
-                // Icon to show the app is related to sky/weather
                 const Icon(Icons.cloud, size: 80, color: Colors.white),
 
                 const SizedBox(height: 20),
@@ -142,15 +126,9 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 10),
 
-                const Text(
-                  'First light • Sunrise • Sunset • Last light',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                ),
-
                 const SizedBox(height: 25),
 
-                // Search box
+                // Search box.
                 TextField(
                   controller: cityController,
 
@@ -173,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-                  // Allows user to press Enter to search
+                  // Allows user to press Enter to search.
                   onSubmitted: (value) {
                     searchCity();
                   },
@@ -181,7 +159,7 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 12),
 
-                // Error message appears only when city is not found
+                // Error message appears only when city is not found.
                 if (errorMessage.isNotEmpty)
                   Text(
                     errorMessage,
@@ -194,24 +172,16 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 20),
 
-                // This is the main Card widget for the presentation.
                 Card(
-                  // PROPERTY 1:
-                  // margin controls the space outside the card.
-                  margin: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(20),
 
-                  // PROPERTY 2:
-                  // elevation controls the shadow under the card.
                   elevation: 8,
 
-                  // PROPERTY 3:
-                  // shape controls the rounded corners of the card.
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
                   ),
 
                   child: Padding(
-                    // Padding creates space inside the card.
                     padding: const EdgeInsets.all(24),
 
                     child: Column(
@@ -242,16 +212,37 @@ class _HomePageState extends State<HomePage> {
 
                         const SizedBox(height: 20),
 
-                        Text('First Light: $firstLight'),
-                        const SizedBox(height: 8),
+                        SunlightRow(
+                          title: 'First Light',
+                          time: firstLight,
+                          description: 'Sky starts becoming bright',
+                          icon: Icons.light_mode,
+                          iconColor: Colors.amber,
+                        ),
 
-                        Text('Sunrise: $sunrise'),
-                        const SizedBox(height: 8),
+                        SunlightRow(
+                          title: 'Sunrise',
+                          time: sunrise,
+                          description: 'Sun appears above horizon',
+                          icon: Icons.wb_sunny,
+                          iconColor: Colors.orange,
+                        ),
 
-                        Text('Sunset: $sunset'),
-                        const SizedBox(height: 8),
+                        SunlightRow(
+                          title: 'Sunset',
+                          time: sunset,
+                          description: 'Sun goes below horizon',
+                          icon: Icons.wb_twilight,
+                          iconColor: Colors.deepOrange,
+                        ),
 
-                        Text('Last Light: $lastLight'),
+                        SunlightRow(
+                          title: 'Last Light',
+                          time: lastLight,
+                          description: 'Sky becomes dark',
+                          icon: Icons.nightlight_round,
+                          iconColor: Colors.indigo,
+                        ),
                       ],
                     ),
                   ),
@@ -261,6 +252,42 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+// This widget helps us avoid repeating the same row design many times.
+class SunlightRow extends StatelessWidget {
+  final String title;
+  final String time;
+  final String description;
+  final IconData icon;
+  final Color iconColor;
+
+  const SunlightRow({
+    super.key,
+    required this.title,
+    required this.time,
+    required this.description,
+    required this.icon,
+    required this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+
+      leading: CircleAvatar(
+        backgroundColor: iconColor.withOpacity(0.15),
+        child: Icon(icon, color: iconColor),
+      ),
+
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+
+      subtitle: Text(description),
+
+      trailing: Text(time, style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 }
