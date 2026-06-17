@@ -23,7 +23,7 @@ class SunlightApp extends StatelessWidget {
   }
 }
 
-// We use StatefulWidget because city data will change after searching.
+// We use StatefulWidget because city data changes after searching.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -194,14 +194,66 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 20),
 
-                // Temporary text to show that search logic works.
-                // We will replace this with a Card widget in Part 4.
-                Text(
-                  'Selected city: $cityName',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                // This is the main Card widget for the presentation.
+                Card(
+                  // PROPERTY 1:
+                  // margin controls the space outside the card.
+                  margin: const EdgeInsets.all(10),
+
+                  // PROPERTY 2:
+                  // elevation controls the shadow under the card.
+                  elevation: 8,
+
+                  // PROPERTY 3:
+                  // shape controls the rounded corners of the card.
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+
+                  child: Padding(
+                    // Padding creates space inside the card.
+                    padding: const EdgeInsets.all(24),
+
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.wb_twilight,
+                          size: 70,
+                          color: Colors.deepOrange,
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        Text(
+                          cityName,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        const SizedBox(height: 5),
+
+                        const Text(
+                          'Today’s sunlight forecast',
+                          style: TextStyle(fontSize: 16, color: Colors.black54),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        Text('First Light: $firstLight'),
+                        const SizedBox(height: 8),
+
+                        Text('Sunrise: $sunrise'),
+                        const SizedBox(height: 8),
+
+                        Text('Sunset: $sunset'),
+                        const SizedBox(height: 8),
+
+                        Text('Last Light: $lastLight'),
+                      ],
+                    ),
                   ),
                 ),
               ],
