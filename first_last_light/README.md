@@ -131,3 +131,7 @@ This app does not use an API.
 The sunlight times are fixed sample values for demo purposes. But I am goint to integrate API soon to make it efficient.
 
 The goal of this project is to demonstrate the Flutter Card widget in a simple real-world scenario.
+
+## Comment
+
+I presented on 17/06/2026.
